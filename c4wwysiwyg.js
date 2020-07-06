@@ -230,7 +230,6 @@
     };
 
 var getSelectedImg = function(containerNode) {
-
     // disable firefox resizing
 
     var imgs = document.getElementsByTagName("IMG");
@@ -241,7 +240,6 @@ var getSelectedImg = function(containerNode) {
     function controlselectHandler(evt) {
         evt.preventDefault();
     }
-
     document.body.addEventListener('mscontrolselect', controlselectHandler);
     // use custom image resizing
    /* var classname = containerNode.getElementsByClassName("c4wwysiwyg-img");
@@ -258,10 +256,7 @@ var getSelectedImg = function(containerNode) {
       $('img').removeClass('c4wwysiwyg-selected-img'); 
       $('.resize-container .resize-handle').remove();
       $('.resize-container img').unwrap(); 
-      var mtoolbars = document.getElementsByClassName('c4wwysiwyg-toolbar-icon'), i;
-                for (var i = 0; i < mtoolbars.length; i ++) {
-                    mtoolbars[i].classList.remove("c4wwysiwyg-disabled");
-      }
+
       /*
         var el = document.querySelector('div');
     // get the element's parent node
@@ -287,13 +282,6 @@ containerNode.onclick = function(event){
                 //window.getSelection().removeAllRanges();
                 resizeableImage(node);
                 node.classList.add("c4wwysiwyg-selected-img");
-              //  var x = document.getElementsByClassName("c4wwysiwyg-toolbar-icon");
-              //  console.log('asdasd');
-              //  x[].classList.add("c4wwysiwyg-disabled");
-                var mtoolbars = document.querySelectorAll('.c4wwysiwyg-toolbar .c4wwysiwyg-toolbar-icon'), i;
-                for (var i = 0; i < mtoolbars.length; i ++) {
-                    mtoolbars[i].classList.add("c4wwysiwyg-disabled");
-                }
             }
                 this.onkeydown = function(event) {
                     if(node.classList.contains("c4wwysiwyg-selected-img")){
@@ -1160,7 +1148,6 @@ containerNode.onclick = function(event){
             if (debounced_handleSelection)
                 debounced_handleSelection(clientX, clientY, rightclick);
         };
-
         addEvent(node_c4wwysiwyg, 'mousedown', function(e) {
             removeEvent(window_ie8, 'mouseup', mouseHandler);
             addEvent(window_ie8, 'mouseup', mouseHandler);
@@ -1545,54 +1532,12 @@ containerNode.onclick = function(event){
                 var $newtarget = '';
             }
             if (!url)
-            ; 
+            ;
             else if (c4wwysiwygeditor.getSelectedHTML())
                 c4wwysiwygeditor.insertHTML('<a href="' + html_encode(url) + '" ' + $newtarget + '>' + c4wwysiwygeditor.getSelectedHTML() + '</a>');
             else
                 c4wwysiwygeditor.insertHTML('<a href="' + html_encode(url) + '" ' + $newtarget + '>' + html_encode(url) + '</a>');
             c4wwysiwygeditor.closePopup().collapseSelection();
-        };
-
-        var c4wwysiwygeditor_hovertable = function(element){
-            console.log("dd");
-            var x = element.getAttribute("data-x");
-            var y = element.getAttribute("data-y");
-        
-            gridselect.grid_choser_parameters = {x:x, y:y};
-        
-            $('#grid_chooser').children('div').each(function () 
-            {
-                if(this.dataset.x <= gridselect.grid_choser_parameters.x 
-                        && this.dataset.y <= gridselect.grid_choser_parameters.y)
-                    this.classList.add("chosen");
-                else
-                    this.classList.remove("chosen");
-            });
-        };
-        var content_inserttable = function(c4wwysiwygeditor, $modify_link) {
-          var $list = $('<div/>').addClass('wysiwyg-plugin-list unselectable')
-                      .attr('unselectable','on').attr('id', 'grid_chooser');
-          
-            var grid_content = "";
-            for(var i=0; i<9; i++)
-          {
-                for(var j=0; j<9; j++)
-                {
-                   
-                    grid_content += '<div data-x="'+ (i+1) +'" data-y="'+ (j+1) +'" class="grid_chooser_bit" '
-                    + ' onmouseover="gridselect.on_grid_selector_hover(this)"' 
-                    + ' onclick="gridselect.on_grid_selector_click(this)"></div>';
-                    /*
-                     grid_content += $('<div/>').addClass('grid_chooser_bit')
-                      .attr('data-x', i+1).attr('data-y', j+1).mouseover(function(event){
-                       c4wwysiwygeditor_hovertable(this);
-                      });
-                       */
-                }
-            }
-            c4wwysiwygeditor.insertHTML(grid_content).closePopup().collapseSelection();
-                $list.append(grid_content);
-                return $list;
         };
         var content_insertlink = function(c4wwysiwygeditor, $modify_link) {
             var $inputurl = $('<input type="text" value="">').val($modify_link ? $modify_link.attr('href') : 'http://') // prop('href') does not reflect real value
@@ -1785,136 +1730,19 @@ containerNode.onclick = function(event){
             var $okaybutton = $();
             if (toolbar_submit)
                 $okaybutton = toolbar_button(toolbar_submit).click(function(event) {
-                  var regex = new RegExp('^(https?:\\/\\/)?'+ // protocol
-                  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name and extension
-                  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-                  '(\\:\\d+)?'+ // port
-                  '(\\/[-a-z\\d%@_.~+&:]*)*'+ // path
-                  '(\\?[;&a-z\\d%@_.,~+&:=-]*)?'+ // query string
-                  '(\\#[-a-z\\d_]*)?$','i');
-                  if(!regex.test($inputurl.val())) {
-                    alert("Please enter valid URL.");
-                    return false;
-                  } else {
-                    if($inputurl.val().match(/\.(jpeg|jpg|gif|png)$/) != null){
                     insert_image_c4wwysiwyg($inputurl.val());
                     event.stopPropagation();
                     event.preventDefault();
                     return false;
-                } else {
-                    alert("Please enter valid image.");
-                    return false;
-                }
-                      }
                 });
             $content.append($('<div/>').append($inputurl).append($okaybutton));
             return $content;
         };
-        function validurl(str) {
-          var regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-          if(!regex .test(str)) {
-            alert("Please enter valid URL.");
-            return false;
-          } else {
-            return true;
-          }
-        }
+        
         function youtubeurl(url) {
             var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
             return (url.match(p)) ? RegExp.$1 : false;
         }
-        function checkAllowedDomains()
-        {
-
-var BG4 = {
-// private property
-_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-
-// public method for decoding
-keycode : function (input) {
-    var output = "";
-    var chr1, chr2, chr3;
-    var enc1, enc2, enc3, enc4;
-    var i = 0;
-
-    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-    while (i < input.length) {
-
-        enc1 = BG4._keyStr.indexOf(input.charAt(i++));
-        enc2 = BG4._keyStr.indexOf(input.charAt(i++));
-        enc3 = BG4._keyStr.indexOf(input.charAt(i++));
-        enc4 = BG4._keyStr.indexOf(input.charAt(i++));
-
-        chr1 = (enc1 << 2) | (enc2 >> 4);
-        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-        chr3 = ((enc3 & 3) << 6) | enc4;
-
-        output = output + String.fromCharCode(chr1);
-
-        if (enc3 != 64) {
-            output = output + String.fromCharCode(chr2);
-        }
-        if (enc4 != 64) {
-            output = output + String.fromCharCode(chr3);
-        }
-
-    }
-
-    output = BG4._utf8_decode(output);
-
-    return output;
-
-},
-
-// private method for UTF-8 decoding
-_utf8_decode : function (utftext) {
-    var string = "";
-    var i = 0, c1, c2;
-    var c = c1 = c2 = 0;
-
-    while ( i < utftext.length ) {
-
-        c = utftext.charCodeAt(i);
-
-        if (c < 128) {
-            string += String.fromCharCode(c);
-            i++;
-        }
-        else if((c > 191) && (c < 224)) {
-            c2 = utftext.charCodeAt(i+1);
-            string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-            i += 2;
-        }
-        else {
-            c2 = utftext.charCodeAt(i+1);
-            c3 = utftext.charCodeAt(i+2);
-            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-            i += 3;
-        }
-
-    }
-    return string;
-}
-}
-            var parts = location.hostname.split('.');
-            var subdomain = parts.shift();
-            var upperleveldomain = parts.join('.');
-            var b1 = BG4.keycode('YWN0LWluby5jb20=');
-            var b2 = BG4.keycode('YzR3Lmx1');
-            var encodedString = [b1, b2];
-            var allvalues = encodedString;
-             for(var i=0; i<allvalues.length; i++){
-               if(allvalues.indexOf(upperleveldomain) > -1 || location.hostname == 'localhost' || location.hostname == '127.0.0.1'){
-                break;
-               } else {
-                var output = BG4.keycode('PGRpdiBzdHlsZT0icG9zaXRpb246YWJzb2x1dGU7cmlnaHQ6MDsgYm90dG9tOjA7IHBhZGRpbmc6OHB4OyBiYWNrZ3JvdW5kOiMzZmI0YzY7Ij48YSBocmVmPSJodHRwOi8vd3d3LmFjdC1pbm8uY29tIiB0YXJnZXQ9Il9ibGFuayIgc3R5bGU9ImNvbG9yOiNmZmY7IHRleHQtZGVjb3JhdGlvbjpub25lOyBmb250LXNpemU6MTRweCI+SW52YWxpZCBMaWNlbnNlIEtleTwvYT48L2Rpdj4=');
-                $('.c4wwysiwyg-wrapper').append(output);
-                break;
-               }
-              }
-        }
-
         /*
         var newStr = str.replace(/(<a href=")?((https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)))(">(.*)<\/a>)?/gi, function () {
             return '<a href="' + arguments[2] + '">' + (arguments[7] || arguments[2]) + '</a>'
@@ -2043,12 +1871,6 @@ _utf8_decode : function (utftext) {
                     return function(target) {
                         popup_callback(content_insertlink(c4wwysiwygeditor), target);
                     };
-                case 'inserttable':
-                    if (!popup_callback)
-                        return null;
-                    return function(target) {
-                        popup_callback(content_inserttable(c4wwysiwygeditor), target);
-                    };    
                 case 'bold':
                     return function() {
                         c4wwysiwygeditor.bold(); // .closePopup().collapseSelection()
@@ -2186,16 +2008,10 @@ _utf8_decode : function (utftext) {
                 var $button;
                 if (toolbar_handler)
                     $button = toolbar_button(value).click(function(event) {
-                        if(this.classList.contains('c4wwysiwyg-disabled')){
-                            console.log('disabled');
-                        } else {
-                            toolbar_handler(event.currentTarget);
+                        toolbar_handler(event.currentTarget);
                         // Give the focus back to the editor. Technically not necessary
-                        if (get_toolbar_handler(key)){
+                        if (get_toolbar_handler(key)) // only if not a popup-handler
                             c4wwysiwygeditor.getElement().focus();
-                        }
-                        }
-                        
                         event.stopPropagation();
                         event.preventDefault();
                         return false;
@@ -2433,7 +2249,7 @@ _utf8_decode : function (utftext) {
                         $placeholder.hide();
                 };
             }
-            checkAllowedDomains();
+
             var c4wwysiwygeditor = c4wwysiwyg(option);
             return c4wwysiwygeditor;
         }
@@ -2443,7 +2259,7 @@ _utf8_decode : function (utftext) {
         var $container = $textarea.closest('.c4wwysiwyg-container');
         
         if ($container.length == 0) {
-            $container = $('<div/>').addClass('c4wwysiwyg-container').attr('id', 'c4wwysiwyg-container');
+            $container = $('<div/>').addClass('c4wwysiwyg-container');
             if (classes)
                 $container.addClass(classes);
             $textarea.wrap($container);
@@ -2505,20 +2321,7 @@ _utf8_decode : function (utftext) {
                 $container.addClass('c4wwysiwyg-active');
                 $container.find('.c4wwysiwyg-toolbar-focus').slideDown(200);
             };
-            var imgset = {
-                unsetimgtselection: function(){
-                  $('img').removeClass('c4wwysiwyg-selected-img'); 
-                  $('.resize-container .resize-handle').remove();
-                  $('.resize-container img').unwrap(); 
-                  var mtoolbars = document.getElementsByClassName('c4wwysiwyg-toolbar-icon'), i;
-                            for (var i = 0; i < mtoolbars.length; i ++) {
-                                mtoolbars[i].classList.remove("c4wwysiwyg-disabled");
-                  }
-                
-              }
-            };
             var remove_class_active = function() {
-                 imgset.unsetimgtselection();
                 if (remove_active_timeout || document.activeElement == c4wwysiwygeditor.getElement())
                     return;
                 remove_active_timeout = setTimeout(function() {
@@ -2528,14 +2331,7 @@ _utf8_decode : function (utftext) {
                         $container.find('.c4wwysiwyg-toolbar-focus').slideUp(200);
                 }, 100);
             };
-            document.addEventListener('mouseup', function (e) {
-                var container = document.getElementById('c4wwysiwyg-container');
-                if (!container.contains(e.target)) {
-                    remove_class_active();
-                }
-            }.bind(this));
-           // $(c4wwysiwygeditor.getElement()).blur(remove_class_active);
-           // $(c4wwysiwygeditor.getElement()).focus(add_class_active).blur(remove_class_active);
+            $(c4wwysiwygeditor.getElement()).focus(add_class_active).blur(remove_class_active);
             $textarea.closest('form').on('reset', remove_class_active);
 
             // Hotkey+Commands-List
@@ -2623,8 +2419,11 @@ _utf8_decode : function (utftext) {
                     placeholder = option.placeholder || $that.prop('placeholder'),
                     toolbar_position = option.toolbar || 'top',
                     toolbar_buttons = option.buttons || {},
-                    toolbar_submit = { title: "Submit", image: "\uf00c" },
-                    toolbar_unlink = { class: 'c4wwysiwyg-unlink', image: 'Unlink' },
+                    toolbar_submit = option.submit,
+                    toolbar_unlink = {
+                        class: 'c4wwysiwyg-unlink',
+                        image: 'Unlink'
+                    },
                     label_selectImage = option.selectImage,
                     placeholder_url = option.placeholderUrl || null,
                     placeholder_embed = option.placeholderEmbed || null,
@@ -2705,7 +2504,7 @@ var resizeableImage = function(image_target) {
     e.preventDefault();
     e.stopPropagation();
     saveEventState(e);
-    //popmenu();
+    popmenu();
     $(document).on('mousemove touchmove', resizing);
     $(document).on('mouseup touchend', endResize);
   };
@@ -2810,102 +2609,3 @@ function unsetimgtselection(){
 
   init();
 };
-var gridselect = {
-    on_grid_selector_hover: function(element)  
-    {
-        var x = element.getAttribute("data-x");
-        var y = element.getAttribute("data-y");
-        
-        gridselect.grid_choser_parameters = {x:x, y:y};
-        
-        $('#grid_chooser').children('div').each(function () 
-        {
-            if(this.dataset.x <= gridselect.grid_choser_parameters.x 
-                    && this.dataset.y <= gridselect.grid_choser_parameters.y)
-                this.classList.add("chosen");
-            else
-                this.classList.remove("chosen");
-        });
-    },
-    pastehtml: function(html){
-        var sel, range;
-    if (window.getSelection) {
-        // IE9 and non-IE
-        sel = window.getSelection();
-        if (sel.getRangeAt && sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            range.deleteContents();
-
-            // Range.createContextualFragment() would be useful here but is
-            // non-standard and not supported in all browsers (IE9, for one)
-            var el = document.createElement("div");
-            el.innerHTML = html;
-            var frag = document.createDocumentFragment(), node, lastNode;
-            while ( (node = el.firstChild) ) {
-                lastNode = frag.appendChild(node);
-            }
-            range.insertNode(frag);
-            
-            // Preserve the selection
-            if (lastNode) {
-                range = range.cloneRange();
-                range.setStartAfter(lastNode);
-                range.collapse(true);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-        }
-    } else if (document.selection && document.selection.type != "Control") {
-        // IE < 9
-        document.selection.createRange().pasteHTML(html);
-    }
-    },
-    saveSelection: function(containerNode) {
-        if (window.getSelection) {
-            var sel = window.getSelection();
-            if (sel.rangeCount > 0)
-                return sel.getRangeAt(0);
-        } else if (document.selection) {
-            var sel = document.selection;
-            return sel.createRange();
-        }
-        return null;
-    },
-    restoreSelection: function(containerNode, savedSel) {
-        if (!savedSel)
-            return;
-        if (window.getSelection) {
-            var sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(savedSel);
-        } else if (document.selection) {
-            savedSel.select();
-        }
-    },
-    on_grid_selector_click: function(element)
-    {
-
-        gridselect.saveSelection(document.getElementById("change4win-wysiwyg-editor"));
-
-         var x = element.getAttribute("data-x");
-         var y = element.getAttribute("data-y");
-        
-        var table = '<table style="table-layout:fixed">';
-        for(var i=0; i<x; i++)
-        {
-            table += "<tr>";
-            for(var j=0; j<y; j++)
-            {
-                table += "<td id='grid_configurator_cell_"+i+j+"' onclick='$(this).toggleClass(\"selected\")'></td>";
-            }
-            table += "</tr>";
-        }
-        table += "</table>";
-
-        gridselect.pastehtml(table);
-        $('.c4wwysiwyg-popup').html('');
-        $('.c4wwysiwyg-popup').remove();
-
-        
-    }
-}
