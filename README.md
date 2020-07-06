@@ -1,1 +1,1 @@
-# c4wwysiwyg
+# Change4Win WYSIWYG
